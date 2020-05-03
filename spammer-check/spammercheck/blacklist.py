@@ -64,8 +64,17 @@ def _host_name_for(address):
 
 def _do_search(host_name):
     try:
-        _, _, codes = socket.gethostbyname_ex(host_name)
+        _, _, all_codes = socket.gethostbyname_ex(
+            host_name
+        )
     except socket.gaierror:
         return None
     else:
-        return codes
+        public_IP_zone_codes = [
+            c for c in all_codes
+            if (c in _ZONES)
+        ]
+
+        return (public_IP_zone_codes
+                if (public_IP_zone_codes)
+                else None)
