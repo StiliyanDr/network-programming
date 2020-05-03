@@ -57,19 +57,21 @@ def format_zones(zones):
     )
 
 
+def log_error(message):
+    sys.stderr.write(f"{message}\n")
+
+
 if (__name__ == "__main__"):
     try:
         addresses = determine_addresses_to_search(
             sys.argv[1:]
         )
     except ValueError as e:
-        sys.stderr.write(f"{e}\n")
+        log_error(str(e))
     else:
         if (addresses is not None):
             for a in addresses:
                 zones = blacklist.search(a)
                 print_result_for(a, zones)
         else:
-            sys.stderr.write(
-                "Unable to obtain host address."
-             )
+            log_error("Unable to obtain host address.")
